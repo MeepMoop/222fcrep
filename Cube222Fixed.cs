@@ -480,6 +480,21 @@ namespace CubeStates
             return stateStickers[face][sticker];
         }
 
+        // check if solved state
+        public bool CheckSolved()
+        {
+            bool solved = true;
+
+            for (int i = 0; i < 7; i++)
+                if( stateOP[0][i] != i || stateOP[1][i] != 0 )
+                {
+                    solved = false;
+                    break;
+                }
+
+            return solved;
+        }
+
         // set OP state - from OP rep
         public void SetState(int[][] stateOPNew)
         {
