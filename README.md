@@ -1,3 +1,3 @@
 # CubeStates
 
-A collection of C# cube representation classes.
+A collection of C# cube representations.
