@@ -494,6 +494,44 @@ namespace CubeStates
 
             return solved;
         }
+        
+        // get a unique int identifier for the orientation state - ranges from 0 to 2186
+        public int GetOIndex()
+        {
+            int[] pow3 = new int[7] { 1, 3, 9, 27, 81, 243, 729 };
+            int index = 0;
+
+            for (int i = 0; i < 7; i++)
+                index += state[1][i] * pow3[i];
+
+            return index;
+        }
+
+        // get a unique int identifier for the permutation state - ranges from 0 to 5039
+        public int GetPIndex()
+        {
+            List<int> permList = new List<int>() { 0, 1, 2, 3, 4, 5, 6 };
+            int[] factList = new int[7] { 720, 120, 24, 6, 2, 1, 1 };
+
+            int index = 0;
+
+            for (int i = 0; i < 7; i++)
+                for (int j = 0; j < permList.Count; j++)
+                    if (state[0][i] == permList[j])
+                    {
+                        index += factList[i] * j;
+                        permList.RemoveAt(j);
+                        break;
+                    }
+
+            return index;
+        }
+
+        // get a unique identifier for the entire cube state - ranges from 0 to 11022479
+        public int GetOPIndex()
+        {
+            return GetOIndex() * 5040 + GetPIndex();
+        }
 
         // set OP state - from OP rep
         public void SetState(int[][] stateOPNew)
@@ -507,6 +545,15 @@ namespace CubeStates
         {
             colUFR = new int[3] { -stateStickers[3][2], -stateStickers[4][3], -stateStickers[5][2] };
             stateOP = PrimesToOP(StickersToPrimes(stateStickers));
+        }
+        
+        // copy OP state - from OP rep reference
+        public void CopyState(int[][] stateOPRef)
+        {
+            colUFR = new int[3] { 1, 2, 3 };
+            for (int i = 0; i < 2; i++)
+                for (int j = 0; j < 7; j++)
+                    state[i][j] = stateOPRef[i][j];
         }
 
         // do move - move index
